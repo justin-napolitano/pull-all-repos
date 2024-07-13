@@ -1,7 +1,10 @@
 #!/bin/bash
 
-# Define the root directory where your repos are located
-ROOT_DIR="/home/cobra/Repos/"
+# Define the default root directory where your repos are located
+DEFAULT_ROOT_DIR="/home/cobra/Repos"
+
+# Use the provided argument as the root directory, or the default if none is provided
+ROOT_DIR=${1:-$DEFAULT_ROOT_DIR}
 
 echo "Starting update process for repositories in $ROOT_DIR"
 
