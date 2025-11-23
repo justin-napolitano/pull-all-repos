@@ -1,150 +1,50 @@
-+++
-title =  "Update All Repos Bash Script"
-description = "Utility script to update all repos wihtin a directory." 
-author = "Justin Napolitano"
-tags = ["scripting","bash"]
-images = ["images/feature-image.png"]
-date = "2024-07-13"
-categories = ["projects"]
-series = ["bash"]
-+++
+---
+slug: "github-pull-all-repos"
+title: "pull-all-repos"
+repo: "justin-napolitano/pull-all-repos"
+githubUrl: "https://github.com/justin-napolitano/pull-all-repos"
+generatedAt: "2025-11-23T09:27:51.681918Z"
+source: "github-auto"
+---
 
-# Update Repositories Script
 
-This script recursively finds all git repositories in a specified directory, checks out all branches, and pulls the latest changes for each one. It includes a blacklist feature to only checkout the main branch for specified repositories.
+# Update All Repos Script: Technical Overview
 
-## Prerequisites
+This project addresses the practical need to maintain multiple git repositories efficiently. When managing numerous repositories locally, manually updating each branch across all repos is tedious and error-prone. This Bash script automates that process by recursively scanning a directory tree for git repositories, then pulling updates on all branches within each repo.
 
-- Bash shell
-- Git installed
-- Proper permissions to access and modify the repositories
+## Motivation
 
-## Installation
+Developers often clone many repositories for different projects or components. Keeping these repositories current requires running git pull commands on each branch individually, which is time-consuming and prone to oversight. The script solves this by automating the discovery and update process.
 
-1. **Create the script**:
-   Save the following script to a file named `update_repos.sh`:
+Additionally, some repositories may require special handling, such as only updating the main branch to avoid disrupting work-in-progress branches. To accommodate this, the script includes a blacklist feature. Repositories listed in a configurable blacklist file are only updated on their main branch.
 
-   ```bash
-   #!/bin/bash
+## How It Works
 
-   # Define the default root directory where your repos are located
-   DEFAULT_ROOT_DIR="/home/cobra/Repos"
+1. **Root Directory Scanning**: The script accepts a root directory argument or defaults to `/home/cobra/Repos`. It recursively searches this directory for git repositories by detecting `.git` folders.
 
-   # Define the default blacklist file location
-   BLACKLIST_FILE="/etc/update_repos_blacklist.conf"
+2. **Blacklist Handling**: It reads a blacklist file (default `/etc/update_repos_blacklist.conf`) containing repository paths. If a repository is blacklisted, the script limits updates to the main branch only.
 
-   # Use the provided argument as the root directory, or the default if none is provided
-   ROOT_DIR=${1:-$DEFAULT_ROOT_DIR}
+3. **Branch Updates**: For each repository, the script checks out each branch sequentially and performs a `git pull` to fetch the latest changes.
 
-   # Export the BLACKLIST_FILE variable so it's available in subshells
-   export BLACKLIST_FILE
+4. **Logging and Output**: The script outputs status messages indicating which repositories and branches are being updated, and whether they are blacklisted.
 
-   # Function to check if a repository is blacklisted
-   is_blacklisted() {
-       local repo_dir=$1
-       echo "Checking for Blacklisted $repo_dir in $BLACKLIST_FILE"
-       if [ -z "$BLACKLIST_FILE" ]; then
-           echo "BLACKLIST_FILE is not set"
-           return 1
-       fi
-       if [ ! -f "$BLACKLIST_FILE" ]; then
-           echo "Blacklist file does not exist: $BLACKLIST_FILE"
-           return 1
-       fi
-       grep -qxF "$repo_dir" "$BLACKLIST_FILE"
-       local result=$?
-       if [ $result -eq 0 ]; then
-           echo "$repo_dir is blacklisted"
-       else
-           echo "$repo_dir is not blacklisted"
-       fi
-       return $result
-   }
+## Implementation Details
 
-   echo "Starting update process for repositories in $ROOT_DIR"
-   echo "Using blacklist file: $BLACKLIST_FILE"
+- **Blacklist Checking**: The `is_blacklisted` function verifies if a repo path exists in the blacklist file using `grep -qxF`. It returns a status code to control update behavior.
 
-   # Function to pull changes in all branches of a git repository
-   pull_all_branches() {
-       local repo_dir=$1
-       echo "Pulling updates in $repo_dir"
-       cd "$repo_dir" || return
-       
-       if is_blacklisted "$repo_dir"; then
-           echo "Repository is blacklisted, only pulling main branch"
-           git checkout main || git checkout -b main origin/main
-           git pull origin main
-       else
-           # Fetch all branches
-           git fetch --all
-           
-           # Get a list of all branches
-           branches=$(git branch -r | grep -v '\->')
-           
-           # Checkout and pull each branch
-           for branch in $branches; do
-               local_branch=${branch#origin/}
-               git checkout "$local_branch" || git checkout -b "$local_branch" "origin/$local_branch"
-               git pull origin "$local_branch"
-           done
-       fi
-       
-       echo "Completed update in $repo_dir"
-       cd - || return
-   }
+- **Branch Enumeration**: The script likely uses `git branch` or `git branch -r` commands to list branches. For blacklisted repos, it restricts to the main branch.
 
-   # Export the functions so they can be used by find -exec
-   export -f pull_all_branches
-   export -f is_blacklisted
+- **Error Handling**: Basic checks ensure the blacklist file exists and is set. The script also verifies directory changes succeed before running git commands.
 
-   # Ensure the blacklist file exists
-   if [ ! -f "$BLACKLIST_FILE" ]; then
-       echo "Blacklist file not found: $BLACKLIST_FILE"
-       exit 1
-   fi
+- **Configurability**: Default paths for root directory and blacklist file are set as variables, allowing easy modification.
 
-   # Find all .git directories and pull changes in all branches in their parent directories
-   find "$ROOT_DIR" -name ".git" -type d -exec bash -c 'pull_all_branches "$(dirname "{}")"' \;
+## Practical Considerations
 
-   echo "All repositories updated."
-   ```
+- The script requires Bash and Git installed on the system.
+- Proper permissions are necessary to access and modify the repositories.
+- The blacklist file should contain absolute or relative paths matching the repo directories.
+- The script assumes the main branch is named `main`; adjustments may be needed for repos using `master` or other names.
 
-2. **Make the script executable**:
-   ```bash
-   chmod +x update_repos.sh
-   ```
+## Conclusion
 
-3. **Move the script to `/usr/local/bin`**:
-   ```bash
-   sudo mv update_repos.sh /usr/local/bin/update_repos
-   ```
-
-4. **Create the blacklist configuration file**:
-   ```bash
-   sudo touch /etc/update_repos_blacklist.conf
-   ```
-
-   - Add the paths of the repositories you want to blacklist to this file, one per line. For example:
-     ```
-     /home/cobra/Repos/repo1
-     /home/cobra/Repos/repo2
-     ```
-
-5. **Verify the script is accessible**:
-   You can now run the script from anywhere by simply typing `update_repos` in the terminal.
-
-## Usage
-
-1. Open a terminal.
-2. Run the script by typing:
-   ```bash
-   update_repos [path_to_repos]
-   ```
-
-   - If no path is provided, it defaults to `/home/cobra/Repos`.
-
-The script will find all `.git` directories in the specified root directory, checkout all branches, and pull the latest changes for each branch. If a repository is blacklisted, it will only checkout and pull the main branch. It will provide status updates during the process.
-
-## License
-
-This project is licensed under the MIT License.
+This script is a straightforward yet effective tool for automating the update of multiple git repositories. It balances automation with control via the blacklist feature, reducing manual overhead for developers managing many repos. Future enhancements could include concurrency, improved blacklist patterns, and extended VCS support, but the current implementation provides a solid foundation for routine maintenance tasks.
