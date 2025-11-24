@@ -20,6 +20,12 @@ seoSecondaryKeywords:
   - git repositories
   - repository updates
 seoOptimized: true
+topicFamily: automation
+topicFamilyConfidence: 1
+topicFamilyNotes: >-
+  The post is focused on a Bash script automating the process of pulling updates across multiple Git
+  repositories, which fits squarely within the Automation family that covers scripts and projects
+  automating git workflows.
 ---
 
 # Update All Repos Script: Technical Overview
@@ -62,4 +68,5 @@ Additionally, some repositories may require special handling, such as only updat
 ## Conclusion
 
 This script is a straightforward yet effective tool for automating the update of multiple git repositories. It balances automation with control via the blacklist feature, reducing manual overhead for developers managing many repos. Future enhancements could include concurrency, improved blacklist patterns, and extended VCS support, but the current implementation provides a solid foundation for routine maintenance tasks.
+
 
