@@ -1,12 +1,26 @@
 ---
-slug: "github-pull-all-repos"
-title: "pull-all-repos"
-repo: "justin-napolitano/pull-all-repos"
-githubUrl: "https://github.com/justin-napolitano/pull-all-repos"
-generatedAt: "2025-11-23T09:27:51.681918Z"
-source: "github-auto"
+slug: github-pull-all-repos
+title: Bash Script to Automate Pulling Updates for Multiple Git Repositories
+repo: justin-napolitano/pull-all-repos
+githubUrl: https://github.com/justin-napolitano/pull-all-repos
+generatedAt: '2025-11-23T09:27:51.681918Z'
+source: github-auto
+summary: >-
+  A Bash script that recursively scans directories for git repositories and pulls updates on all
+  branches, with blacklist support for selective updating.
+tags:
+  - bash
+  - git
+  - automation
+  - repository-management
+  - shell-script
+seoPrimaryKeyword: git pull automation
+seoSecondaryKeywords:
+  - bash script
+  - git repositories
+  - repository updates
+seoOptimized: true
 ---
-
 
 # Update All Repos Script: Technical Overview
 
@@ -48,3 +62,4 @@ Additionally, some repositories may require special handling, such as only updat
 ## Conclusion
 
 This script is a straightforward yet effective tool for automating the update of multiple git repositories. It balances automation with control via the blacklist feature, reducing manual overhead for developers managing many repos. Future enhancements could include concurrency, improved blacklist patterns, and extended VCS support, but the current implementation provides a solid foundation for routine maintenance tasks.
+
