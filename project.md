@@ -7,8 +7,8 @@ githubUrl: https://github.com/justin-napolitano/pull-all-repos
 generatedAt: '2025-11-24T21:36:01.920Z'
 source: github-auto
 summary: >-
-  A Bash script that recursively pulls updates from all git repositories in a
-  directory, with support for blacklisting specific repos.
+  A Bash script that recursively pulls updates from all git repositories in a directory, with
+  support for blacklisting specific repos.
 tags:
   - bash
   - git
@@ -22,8 +22,8 @@ seoSecondaryKeywords:
   - blacklist git repos
   - shell scripting for git
 seoOptimized: true
-topicFamily: null
-topicFamilyConfidence: null
+topicFamily: automation
+topicFamilyConfidence: 0.9
 kind: project
 entryLayout: project
 showInProjects: true
@@ -131,4 +131,5 @@ Run the script with an optional root directory argument. If no argument is provi
 ---
 
 _Last updated: 2024-07-13_
+
 
