@@ -1,20 +1,27 @@
 ---
 slug: github-pull-all-repos
 id: github-pull-all-repos
-title: Update All Repos
+title: Bash Script to Pull All Git Repositories Automatically
 repo: justin-napolitano/pull-all-repos
 githubUrl: https://github.com/justin-napolitano/pull-all-repos
 generatedAt: '2025-11-24T21:36:01.920Z'
 source: github-auto
 summary: >-
-  A Bash script to recursively locate all git repositories within a specified
-  directory, check out all branches, and pull the latest changes. It supports a
-  blacklist mechanism to restrict updates to only the main branch for selected
-  repositories.
-tags: []
-seoPrimaryKeyword: ''
-seoSecondaryKeywords: []
-seoOptimized: false
+  A Bash script that recursively pulls updates from all git repositories in a
+  directory, with support for blacklisting specific repos.
+tags:
+  - bash
+  - git
+  - scripting
+  - repository management
+seoPrimaryKeyword: bash script pull all git repositories
+seoSecondaryKeywords:
+  - git repository automation
+  - bash automation script
+  - update git branches
+  - blacklist git repos
+  - shell scripting for git
+seoOptimized: true
 topicFamily: null
 topicFamilyConfidence: null
 kind: project
